@@ -40,6 +40,11 @@ class Section(object) :
             if k[-5:]=='param' and vars(self).get(k)<>None :
                 param=vars(self).get(k)
                 if type(param)==str :
+                    # afin de conserver le nom du fichier d'entrée 
+                    # on crée un dict avec l'extension _filename
+                    Dict_filename={k[:-6]+'_filename':param}
+                    vars(self).update(Dict_filename)
+                    
                     # si param est une chaine c'est un fichier à charger
                     # on doit avoir un fichier csv avec :
                     # le delimiter= tab ou espace 
@@ -50,7 +55,7 @@ class Section(object) :
                     # afin d'eviter de lire le fichier n fois on change 
                     # la variable param en un array issu du loadtxt
                     vars(self)[k]=param
-                    
+
                 typeDyn=vars(self).get(k[:-6]+'_type')
                 # on crée la fonction qui renvoie la propriété
                 # la fonction partial est indispensable
