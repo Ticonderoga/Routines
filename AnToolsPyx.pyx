@@ -113,3 +113,15 @@ def Solution_Thomas(np.ndarray [FTYPE_t, ndim=1] b not None, \
     x=Thomas_x(y,alpha,c)
     return x
    
+def Mean_rings(np.ndarray [FTYPE_t, ndim=2] V not None) :
+    cdef int m = V.shape[0]
+    cdef int n = V.shape[1]
+    cdef int i
+    cdef FTYPE_t S1=0.0
+    cdef FTYPE_t S2=0.0
+    
+    for i in range(n) :
+        S1=S1+V[1,i]
+        S2=S2+V[2,i]
+    
+    return S1/n,S2/n    
