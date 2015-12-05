@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import ConfigParser
+import configparser
 import numpy as np
 from functools import partial
 #attention il y a aussi scipy.integrate
@@ -18,7 +18,7 @@ class Section(object) :
             elif config.get(sec,it).count(',')>=1 : # on teste si c'est une liste de param
                 if config.get(sec,it).count('pi')==0 : # pas de pi
                     try :
-                        vars(self)[it] = map(float,config.get(sec,it).split(','))
+                        vars(self)[it] = list(map(float,config.get(sec,it).split(',')))
                     except ValueError :
                         vars(self)[it] = config.get(sec,it).split(',') # une liste de chaines
                         
@@ -36,15 +36,10 @@ class Section(object) :
                 except ValueError : # a-priori on a un mélange float + str
                     vars(self)[it] = config.get(sec,it)
         
-        for k in vars(self).keys() : 
+        for k in list(vars(self).keys()) : 
             if k[-5:]=='param' and vars(self).get(k)!=None :
                 param=vars(self).get(k)
                 if type(param)==str :
-                    # afin de conserver le nom du fichier d'entrée 
-                    # on crée un dict avec l'extension _filename
-                    Dict_filename={k[:-6]+'_filename':param}
-                    vars(self).update(Dict_filename)
-                    
                     # si param est une chaine c'est un fichier à charger
                     # on doit avoir un fichier csv avec :
                     # le delimiter= tab ou espace 
@@ -55,7 +50,7 @@ class Section(object) :
                     # afin d'eviter de lire le fichier n fois on change 
                     # la variable param en un array issu du loadtxt
                     vars(self)[k]=param
-
+                    
                 typeDyn=vars(self).get(k[:-6]+'_type')
                 # on crée la fonction qui renvoie la propriété
                 # la fonction partial est indispensable
@@ -71,6 +66,7 @@ class Section(object) :
         typeDyn=keywords.get('typeDyn')
         All_interp=['linear', 'nearest', 'zero', 'slinear', 'quadratic', 'cubic']
         if typeDyn == 'poly' :
+            print("param",param)
             return np.polyval(param, arg)
         elif All_interp.count(typeDyn) : # il s'agit d'interpolation 
             # i.e. kind peut prendre une des valeurs suivantes
@@ -84,7 +80,7 @@ class Section(object) :
 class ImportData(object) :
     # il s'agit d'une classe encapsulant les sections
     def __init__(self,data_file) :
-        config = ConfigParser.ConfigParser(allow_no_value=True)
+        config = configparser.ConfigParser(allow_no_value=True)
         config.optionxform = str # on respecte les Majuscules / minuscules dans le fichier de cfg
         config.read(data_file) # on lit le fichier
         for sec in config.sections() :
@@ -97,25 +93,25 @@ class ImportData(object) :
 
 
 if __name__ == '__main__':
-    print "===================="
-    print "Tests basiques"
-    print "CuMg :"
+    print("====================")
+    print("Tests basiques")
+    print("CuMg :")
     CuMg=ImportData('AlliageCuMg.cfg')
-    print 'CuMg.Ther.conductivity(45)= ',CuMg.Ther.conductivity(45)
-    print 'CuMg.Elec.resistivity= ', CuMg.Elec.resistivity
-    print 'CuMg.Mech.young_modulus=', CuMg.Mech.young_modulus
-    print ""
-    print "CuSn :"
+    print('CuMg.Ther.conductivity(45)= ',CuMg.Ther.conductivity(45))
+    print('CuMg.Elec.resistivity= ', CuMg.Elec.resistivity)
+    print('CuMg.Mech.young_modulus=', CuMg.Mech.young_modulus)
+    print("")
+    print("CuSn :")
     CuSn=ImportData('AlliageCuSn.cfg')
-    print 'CuSn.Ther.conductivity(45)= ',CuSn.Ther.conductivity(45)
-    print "===================="
-    print "test avec valeurs réelles"
+    print('CuSn.Ther.conductivity(45)= ',CuSn.Ther.conductivity(45))
+    print("====================")
+    print("test avec valeurs réelles")
     Eau=ImportData('Water.cfg')
-    print 'Eau.Chem.Formula=',Eau.Chem.Formula
-    print 'Eau.Chem.MolarMass=',Eau.Chem.MolarMass
-    print "Exemple interpolation quadratic"
-    print 'Eau.Ther.Conductivity(20°C)=',Eau.Ther.Conductivity(20+273.15)
-    print "Exemple interpolation cubic"
-    print 'Eau.Ther.Density(20°C)=',Eau.Ther.Density(20+273.15)
-    print "Exemple un polynome de régression"
-    print 'Eau.Ther.HeatCapacity(20°C)=',Eau.Ther.HeatCapacity(20+273.15)
+    print('Eau.Chem.Formula=',Eau.Chem.Formula)
+    print('Eau.Chem.MolarMass=',Eau.Chem.MolarMass)
+    print("Exemple interpolation quadratic")
+    print('Eau.Ther.Conductivity(20°C)=',Eau.Ther.Conductivity(20+273.15))
+    print("Exemple interpolation cubic")
+    print('Eau.Ther.Density(20°C)=',Eau.Ther.Density(20+273.15))
+    print("Exemple un polynome de régression")
+    print('Eau.Ther.HeatCapacity(20°C)=',Eau.Ther.HeatCapacity(20+273.15))

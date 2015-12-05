@@ -41,7 +41,7 @@ def maillage(x,style,parameter,sens):
         elif sens=='right' :
             return np.sort((1.-f(xs))*(xmax-xmin)+xmin)
     else :
-        print "You should have parameter > 1"
+        print("You should have parameter > 1")
 
 def test_longueur_liste(liste,dim):
     # Fonction de test de longueur d'une liste de valeurs. "liste" désigne la
@@ -54,20 +54,20 @@ def test_longueur_liste(liste,dim):
 
     # On vérifie que la liste à tester est bien une liste.
     if (type(liste) != list):
-        print "test_longueur_liste (Erreur) : Le premier argument envoye dans"
-        print "la fonction n'est pas une liste."
+        print("test_longueur_liste (Erreur) : Le premier argument envoye dans")
+        print("la fonction n'est pas une liste.")
         return 1
     # Que le nombre représentant la dimension est bien un nombre.
     elif (type(dim) == list):
-        print "test_longueur_liste (Erreur) : Le deuxième argument envoye dans"
-        print "la fonction n'est pas une valeur scalaire."
+        print("test_longueur_liste (Erreur) : Le deuxième argument envoye dans")
+        print("la fonction n'est pas une valeur scalaire.")
         return 1
     else:
         # Que le nombre représentant la dimension est bien un nombre entier.
         if (type(dim) == float):
-            print "test_longueur_liste (Avertissement) : La dimension de la"
-            print "liste a tester est entree sous la forme d'un nombre"
-            print "flottant -> conversion automatique en nombre entier."
+            print("test_longueur_liste (Avertissement) : La dimension de la")
+            print("liste a tester est entree sous la forme d'un nombre")
+            print("flottant -> conversion automatique en nombre entier.")
         # On effectue enfin le test en question.
         if (len(liste) == dim):
             return 0
@@ -79,8 +79,8 @@ def comp_longueur_liste(liste1,liste2):
     # renvoie "1" si les deux listes sont de même taille et "0" sinon.
     if (len(liste1) != len(liste2)):
     # Message d'erreur si listes de tailles différentes.
-        print "comp_longueur_liste : (Erreur) Les deux listes à manipuler ne"
-        print "sont pas de la même dimension."
+        print("comp_longueur_liste : (Erreur) Les deux listes à manipuler ne")
+        print("sont pas de la même dimension.")
         return 0
     else:
         return 1
@@ -110,11 +110,11 @@ def interp_polyn_Lagrange(xi,yi,x):
             yn=yn+(NL/DL)*yi[i]
     return yn
 
-def bin(n):
-    """Convertit un nombre en binaire"""
-    res = ''
-    while n != 0: n, res = n >> 1, `n & 1` + res
-    return res
+#def bin(n):
+#    """Convertit un nombre en binaire"""
+#    res = ''
+#    while n != 0: n, res = n >> 1, `n & 1` + res
+#    return res
     
 
 def test_io(StrFile,ncol):
@@ -143,10 +143,10 @@ def multiplot(Tab,*args) :
         for i in range(1,size(Tab,1)) :
             plot(Tab[:,0],Tab[:,i])
     else :
-        if size(args)<>(size(Tab,1)-1) :
-            print "Discordance entre les étiquettes et les colonnes"
-            print "Labels : ",size(args)
-            print "Colonnes : ", size(Tab,1)-1 
+        if size(args)!=(size(Tab,1)-1) :
+            print("Discordance entre les étiquettes et les colonnes")
+            print("Labels : ",size(args))
+            print("Colonnes : ", size(Tab,1)-1 )
         else :
             for i in range(1,size(Tab,1)) :
                 plot(Tab[:,0],Tab[:,i],label=args[i-1])
@@ -196,8 +196,8 @@ def plot_Elec(Tab,nplot,ncurve) :
         Tab2pl=hstack((time,Tab[:,-2:]))
         multiplot(Tab2pl)
     else :
-        print "pas suffisament de place pour tracer"
-        print locals()
+        print("pas suffisament de place pour tracer")
+        print(locals())
 
 def plot_Data(Tab,nplot,ncurve,labx,laby,*args) :
     """ Fonction de tracé des données d'une PAC. Cela 
@@ -225,14 +225,14 @@ def plot_Data(Tab,nplot,ncurve,labx,laby,*args) :
             multiplot(Tab2pl,*argbis)
             if ax.is_last_row() : xlabel(labx)
             if ax.is_first_col() : ylabel(laby)
-        if nrem<>0 :
+        if nrem!=0 :
             subplot(nplot[0],nplot[1],nplot[0]*nplot[1])
             Tab2pl=hstack((time,Tab[:,-nrem:]))
             argbis=args[-nrem:]
             multiplot(Tab2pl,*argbis)
     else :
-        print "pas suffisament de place pour tracer"
-        print locals()
+        print("pas suffisament de place pour tracer")
+        print(locals())
 
 
 
@@ -300,9 +300,9 @@ def rolling_window(a, window):
 
     """
     if window < 1:
-        raise ValueError, "`window` must be at least 1."
+        raise ValueError("`window` must be at least 1.")
     if window > a.shape[-1]:
-        raise ValueError, "`window` is too long."
+        raise ValueError("`window` is too long.")
     shape = a.shape[:-1] + (a.shape[-1] - window + 1, window)
     strides = a.strides + (a.strides[-1],)
     return np.lib.stride_tricks.as_strided(a, shape=shape, strides=strides)
@@ -330,10 +330,10 @@ def moymobfull(Tab,n) :
     return np.vstack([Tab[:p,],moymob2(Tab,n),Tab[-p:,]])
 
 def movavg1d(Tab,n) :
-    if (n-1)%2 <> 0 :
-        print "nombre invalide pas de la forme 2n+1"
+    if (n-1)%2 != 0 :
+        print("nombre invalide pas de la forme 2n+1")
         n=n+1
-        print "on prend n=",n
+        print("on prend n=",n)
     p=(n-1)/2
     #~ extended_data = np.hstack([[Tab[0]] * (n- 1), Tab])
     weightings = np.empty((n,), dtype=np.float_)

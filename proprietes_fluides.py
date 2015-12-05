@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import math,divers
+import math
+from  . import divers
 import numpy as np
 try: import psyco; psyco.full() 
 except: pass
-# Sous programmes de déterminations de propriétés physiques de fluides.
+# Sous programmes de dÃ©terminations de propriÃ©tÃ©s physiques de fluides.
 # On se limite ici aux corps simples c.a.d :
 # - Air sec
 # - Vapeur
@@ -14,32 +15,32 @@ except: pass
 #___/ Conversions \____________________________________________________________
 
 def C2K(T):
-    """ Conversion d'une température en °C en une température en K."""
+    """ Conversion d'une tempÃ©rature en Â°C en une tempÃ©rature en K."""
     return float(T+273.15)
 
 def K2C(T):
-    """ Conversion d'une température en K en une température en °C. """
+    """ Conversion d'une tempÃ©rature en K en une tempÃ©rature en Â°C. """
     if (T<=0) :
-        print "K2C (Avertissement) : La température envoyée est négative,\n\
-        elle ne peut pas être exprimée en K."
+        print("K2C (Avertissement) : La tempÃ©rature envoyÃ©e est nÃ©gative,\n\
+        elle ne peut pas Ãªtre exprimÃ©e en K.")
         return float(T)
     else:
         return float(T-273.15)
 
 
 #    _______________
-#___/ hydrogène sec \________________________________________________________________
+#___/ hydrogÃ¨ne sec \________________________________________________________________
 
-# Capacité thermique.
+# CapacitÃ© thermique.
 def Cph2(T):
-    """ Capacité thermique massique (J/g*K) à pression constante de l'h2 sec considéré
-    comme un gaz parfait => Cp ne dépend que de la températures "T" exprimée
-    en K et comprise entre -50°C et 126°C. """
-    # Test de compatibilité de la valeur de la température
+    """ CapacitÃ© thermique massique (J/g*K) Ã  pression constante de l'h2 sec considÃ©rÃ©
+    comme un gaz parfait => Cp ne dÃ©pend que de la tempÃ©ratures "T" exprimÃ©e
+    en K et comprise entre -50Â°C et 126Â°C. """
+    # Test de compatibilitÃ© de la valeur de la tempÃ©rature
     if ((T<223.15) or (T>400)):
-        # Message d'erreur et arrêt.
-        print " Cph2 (Erreur) : La température envoyée doit être comprise entre\n\
-        223.15 K et 400 K."
+        # Message d'erreur et arrÃªt.
+        print(" Cph2 (Erreur) : La tempÃ©rature envoyÃ©e doit Ãªtre comprise entre\n\
+        223.15 K et 400 K.")
         return
     else:
         Cpb=[[223.15,224.03,224.91,225.79,226.67,227.55,228.43,229.31,
@@ -90,8 +91,8 @@ def Cph2(T):
         14.473,14.474,14.474]]    
         # 
         i=int(math.floor((T-Cpb[0][0])/(Cpb[0][1]-Cpb[0][0])))
-        # On crée les listes de valeurs de températures et de Cp entourant la
-        # valeur recherchée.
+        # On crÃ©e les listes de valeurs de tempÃ©ratures et de Cp entourant la
+        # valeur recherchÃ©e.
         LT=[float(0)]*4
         LCp=[float(0)]*4
         for j in range(4):
@@ -100,15 +101,15 @@ def Cph2(T):
         # Puis on appelle la fonction d'interpolation sur ces 4 points
         return divers.interp_polyn_Lagrange(LT,LCp,T)*1000
 
-# Viscosité dynamique.
+# ViscositÃ© dynamique.
 def muh2(T):
-    """ Viscosité dynamique (Pa*s) de l'h2 sec pour une température "T" expimée en K
-    et comprise entre -50°C et 126°C."""
-    # Test de compatibilité de la valeur de la température
+    """ ViscositÃ© dynamique (Pa*s) de l'h2 sec pour une tempÃ©rature "T" expimÃ©e en K
+    et comprise entre -50Â°C et 126Â°C."""
+    # Test de compatibilitÃ© de la valeur de la tempÃ©rature
     if ((T<223.15) or (T>400)):
-        # Message d'erreur et arrêt.
-        print " muas (Erreur) : La température envoyée doit être comprise entre\n\
-        223.15 K et 400 K."
+        # Message d'erreur et arrÃªt.
+        print(" muas (Erreur) : La tempÃ©rature envoyÃ©e doit Ãªtre comprise entre\n\
+        223.15 K et 400 K.")
         return
     else:
         mub=[[223.15,224.03,224.91,225.79,226.67,227.55,228.43,229.31,
@@ -170,8 +171,8 @@ def muh2(T):
         1.0827E-05,1.0843E-05,1.086E-05,1.0876E-05]]
         #
         i=int(math.floor((T-mub[0][0])/(mub[0][1]-mub[0][0])))
-        # On crée les listes de valeurs de températures et de Cp entourant la
-        # valeur recherchée.
+        # On crÃ©e les listes de valeurs de tempÃ©ratures et de Cp entourant la
+        # valeur recherchÃ©e.
         LT=[float(0)]*4
         Lmu=[float(0)]*4
         for j in range(4):
@@ -180,32 +181,32 @@ def muh2(T):
         # Puis on appelle la fonction d'interpolation sur ces 4 points
         return divers.interp_polyn_Lagrange(LT,Lmu,T)
 
-# Viscosité cinématique.
+# ViscositÃ© cinÃ©matique.
 def nuh2(p,T):
-    """ Viscosité cinématique de l'h2 sec pour une pression "p" donnée et une
-    température "T" exprimée en K et comprise entre -50°C et 126°C. """
-    # Test de compatibilité de la valeur de la température
+    """ ViscositÃ© cinÃ©matique de l'h2 sec pour une pression "p" donnÃ©e et une
+    tempÃ©rature "T" exprimÃ©e en K et comprise entre -50Â°C et 126Â°C. """
+    # Test de compatibilitÃ© de la valeur de la tempÃ©rature
     if ((T<223.15) or (T>400)):
-        # Message d'erreur et arrêt.
-        print " nuas (Erreur) : La température envoyée doit être comprise entre\n\
-        223.15 K et 400 K."
+        # Message d'erreur et arrÃªt.
+        print(" nuas (Erreur) : La tempÃ©rature envoyÃ©e doit Ãªtre comprise entre\n\
+        223.15 K et 400 K.")
         return
     else:
-        # On commence par calculer la valeur de la viscosité dynamique
+        # On commence par calculer la valeur de la viscositÃ© dynamique
         mu=muh2(T)
-        # Puis on calcule la masse volumique par la loi d'état des gaz parfaits, ce
-        # qui nous donne la valeur de la viscosité cinématique.
+        # Puis on calcule la masse volumique par la loi d'Ã©tat des gaz parfaits, ce
+        # qui nous donne la valeur de la viscositÃ© cinÃ©matique.
         return mu/(p/(4124.*T))
 
-# Conductivité thermique.
+# ConductivitÃ© thermique.
 def lambdah2(T):
-    """ Conductivité thermique de l'h2 sec pour une température "T" exprimée
-    en K et comprise entre -50°C et 126°C."""
-    # Test de compatibilité de la valeur de la température
+    """ ConductivitÃ© thermique de l'h2 sec pour une tempÃ©rature "T" exprimÃ©e
+    en K et comprise entre -50Â°C et 126Â°C."""
+    # Test de compatibilitÃ© de la valeur de la tempÃ©rature
     if ((T<223.15) or (T>400)):
-        # Message d'erreur et arrêt.
-        print " lambdaas (Erreur) : La température envoyée doit être comprise entre\n\
-        223.15 K et 573.15 K."
+        # Message d'erreur et arrÃªt.
+        print(" lambdaas (Erreur) : La tempÃ©rature envoyÃ©e doit Ãªtre comprise entre\n\
+        223.15 K et 573.15 K.")
         return
     else:
         lambdab=[[223.15,224.03,224.91,225.79,226.67,227.55,228.43,229.31,
@@ -259,8 +260,8 @@ def lambdah2(T):
         0.23325,0.23366,]]
         # 
         i=int(math.floor((T-lambdab[0][0])/(lambdab[0][1]-lambdab[0][0])))
-        # On crée les listes de valeurs de températures et de lambda entourant la
-        # valeur recherchée.
+        # On crÃ©e les listes de valeurs de tempÃ©ratures et de lambda entourant la
+        # valeur recherchÃ©e.
         LT=[float(0)]*4
         Ll=[float(0)]*4
         for j in range(4):
@@ -272,13 +273,13 @@ def lambdah2(T):
 
 # masse volumique.
 def rhoh2(T):
-    """ masse volumique de l'h2 sec pour une température "T" exprimée
-    en K et comprise entre -50°C et 126°C."""
-    # Test de compatibilité de la valeur de la température
+    """ masse volumique de l'h2 sec pour une tempÃ©rature "T" exprimÃ©e
+    en K et comprise entre -50Â°C et 126Â°C."""
+    # Test de compatibilitÃ© de la valeur de la tempÃ©rature
     if ((T<223.15) or (T>399.15)):
-        # Message d'erreur et arrêt.
-        print " rhoh2 (Erreur) : La température envoyée doit être comprise entre\n\
-        223.15 K et 400 K."
+        # Message d'erreur et arrÃªt.
+        print(" rhoh2 (Erreur) : La tempÃ©rature envoyÃ©e doit Ãªtre comprise entre\n\
+        223.15 K et 400 K.")
         return
     else:
         rhob=[[223.15,224.03,224.91,225.79,226.67,227.55,228.43,229.31,
@@ -336,8 +337,8 @@ def rhoh2(T):
         ]]
         # 
         i=int(math.floor((T-rhob[0][0])/(rhob[0][0]-rhob[0][1])))
-        # On crée les listes de valeurs de températures et de lambda entourant la
-        # valeur recherchée.
+        # On crÃ©e les listes de valeurs de tempÃ©ratures et de lambda entourant la
+        # valeur recherchÃ©e.
         LT=[float(0)]*4
         Ll=[float(0)]*4
         for j in range(4):
@@ -350,16 +351,16 @@ def rhoh2(T):
 #    _________
 #___/ Air sec \________________________________________________________________
 
-# Capacité thermique.
+# CapacitÃ© thermique.
 def Cpas(T):
-    """ Capacité thermique massique à pression constante de l'air sec considéré
-    comme un gaz parfait => Cp ne dépend que de la températures "T" exprimée
-    en K et comprise entre -50°C et 300°C. """
-    # Test de compatibilité de la valeur de la température
+    """ CapacitÃ© thermique massique Ã  pression constante de l'air sec considÃ©rÃ©
+    comme un gaz parfait => Cp ne dÃ©pend que de la tempÃ©ratures "T" exprimÃ©e
+    en K et comprise entre -50Â°C et 300Â°C. """
+    # Test de compatibilitÃ© de la valeur de la tempÃ©rature
     if ((T<223.15) or (T>573.15)):
-        # Message d'erreur et arrêt.
-        print " Cpas (Erreur) : La température envoyée doit être comprise entre\n\
-        223.15 K et 573.15 K."
+        # Message d'erreur et arrÃªt.
+        print(" Cpas (Erreur) : La tempÃ©rature envoyÃ©e doit Ãªtre comprise entre\n\
+        223.15 K et 573.15 K.")
         return
     else:
         Cpb=[[
@@ -374,8 +375,8 @@ def Cpas(T):
         1034.4,1036.5,1038.6,1040.7,1042.9,1045.2]]
         # 
         i=int(math.floor(float(T-Cpb[0][0])/10))
-        # On crée les listes de valeurs de températures et de Cp entourant la
-        # valeur recherchée.
+        # On crÃ©e les listes de valeurs de tempÃ©ratures et de Cp entourant la
+        # valeur recherchÃ©e.
         LT=[float(0)]*4
         LCp=[float(0)]*4
         for j in range(4):
@@ -384,15 +385,15 @@ def Cpas(T):
         # Puis on appelle la fonction d'interpolation sur ces 4 points
         return divers.interp_polyn_Lagrange(LT,LCp,T)
 
-# Viscosité dynamique.
+# ViscositÃ© dynamique.
 def muas(T):
-    """ Viscosité dynamique de l'air sec pour une température "T" expimée en K
-    et comprise entre -50°C et 300°C."""
-    # Test de compatibilité de la valeur de la température
+    """ ViscositÃ© dynamique de l'air sec pour une tempÃ©rature "T" expimÃ©e en K
+    et comprise entre -50Â°C et 300Â°C."""
+    # Test de compatibilitÃ© de la valeur de la tempÃ©rature
     if ((T<223.15) or (T>573.15)):
-        # Message d'erreur et arrêt.
-        print " muas (Erreur) : La température envoyée doit être comprise entre\n\
-        223.15 K et 573.15 K."
+        # Message d'erreur et arrÃªt.
+        print(" muas (Erreur) : La tempÃ©rature envoyÃ©e doit Ãªtre comprise entre\n\
+        223.15 K et 573.15 K.")
         return
     else:
         mub=[[223.15,233.15,243.15,253.15,263.15,273.15,283.15,293.15,303.15,
@@ -406,8 +407,8 @@ def muas(T):
         27.64e-6,27.99e-6,28.35e-6,28.70e-6,29.05e-6,29.39e-6]]
         #
         i=int(math.floor(float(T-mub[0][0])/10))
-        # On crée les listes de valeurs de températures et de Cp entourant la
-        # valeur recherchée.
+        # On crÃ©e les listes de valeurs de tempÃ©ratures et de Cp entourant la
+        # valeur recherchÃ©e.
         LT=[float(0)]*4
         Lmu=[float(0)]*4
         for j in range(4):
@@ -416,32 +417,32 @@ def muas(T):
         # Puis on appelle la fonction d'interpolation sur ces 4 points
         return divers.interp_polyn_Lagrange(LT,Lmu,T)
 
-# Viscosité cinématique.
+# ViscositÃ© cinÃ©matique.
 def nuas(p,T):
-    """ Viscosité cinématique de l'air sec pour une pression "p" donnée et une
-    température "T" exprimée en K et comprise entre -50°C et 300°C. """
-    # Test de compatibilité de la valeur de la température
+    """ ViscositÃ© cinÃ©matique de l'air sec pour une pression "p" donnÃ©e et une
+    tempÃ©rature "T" exprimÃ©e en K et comprise entre -50Â°C et 300Â°C. """
+    # Test de compatibilitÃ© de la valeur de la tempÃ©rature
     if ((T<223.15) or (T>573.15)):
-        # Message d'erreur et arrêt.
-        print " nuas (Erreur) : La température envoyée doit être comprise entre\n\
-        223.15 K et 573.15 K."
+        # Message d'erreur et arrÃªt.
+        print(" nuas (Erreur) : La tempÃ©rature envoyÃ©e doit Ãªtre comprise entre\n\
+        223.15 K et 573.15 K.")
         return
     else:
-        # On commence par calculer la valeur de la viscosité dynamique
+        # On commence par calculer la valeur de la viscositÃ© dynamique
         mu=muas(T)
-        # Puis on calcule la masse volumique par la loi d'état des gaz parfaits, ce
-        # qui nous donne la valeur de la viscosité cinématique.
+        # Puis on calcule la masse volumique par la loi d'Ã©tat des gaz parfaits, ce
+        # qui nous donne la valeur de la viscositÃ© cinÃ©matique.
         return mu/(p/(287.*T))
 
-# Conductivité thermique.
+# ConductivitÃ© thermique.
 def lambdaas(T):
-    """ Conductivité thermique de l'air sec pour une température "T" exprimée
-    en K et comprise entre -50°C et 300°C."""
-    # Test de compatibilité de la valeur de la température
+    """ ConductivitÃ© thermique de l'air sec pour une tempÃ©rature "T" exprimÃ©e
+    en K et comprise entre -50Â°C et 300Â°C."""
+    # Test de compatibilitÃ© de la valeur de la tempÃ©rature
     if ((T<223.15) or (T>573.15)):
-        # Message d'erreur et arrêt.
-        print " lambdaas (Erreur) : La température envoyée doit être comprise entre\n\
-        223.15 K et 573.15 K."
+        # Message d'erreur et arrÃªt.
+        print(" lambdaas (Erreur) : La tempÃ©rature envoyÃ©e doit Ãªtre comprise entre\n\
+        223.15 K et 573.15 K.")
         return
     else:
         lambdab=[[
@@ -458,8 +459,8 @@ def lambdaas(T):
         44.01e-3]]
         # 
         i=int(math.floor(float(T-lambdab[0][0])/10))
-        # On crée les listes de valeurs de températures et de lambda entourant la
-        # valeur recherchée.
+        # On crÃ©e les listes de valeurs de tempÃ©ratures et de lambda entourant la
+        # valeur recherchÃ©e.
         LT=[float(0)]*4
         Ll=[float(0)]*4
         for j in range(4):
@@ -470,13 +471,13 @@ def lambdaas(T):
 
 # Nombre de Prandl
 def Pras(T):
-    """ Nombre de Prandtl de l'air sec pour une température "T" exprimée en K
-    et comprise entre -50 et 300 °C """
-    # Test de compatibilité de la valeur de la température
+    """ Nombre de Prandtl de l'air sec pour une tempÃ©rature "T" exprimÃ©e en K
+    et comprise entre -50 et 300 Â°C """
+    # Test de compatibilitÃ© de la valeur de la tempÃ©rature
     if ((T<223.15) or (T>573.15)):
-        # Message d'erreur et arrêt.
-        print " Pras (Erreur) : La température envoyée doit être comprise entre\n\
-        223.15 K et 573.15 K."
+        # Message d'erreur et arrÃªt.
+        print(" Pras (Erreur) : La tempÃ©rature envoyÃ©e doit Ãªtre comprise entre\n\
+        223.15 K et 573.15 K.")
         return
     else:
         Prb=[[
@@ -491,8 +492,8 @@ def Pras(T):
         0.698,0.698,0.698]]
         # 
         i=int(math.floor(float(T-Prb[0][0])/10))
-        # On crée les listes de valeurs de températures et de lambda entourant la
-        # valeur recherchée.
+        # On crÃ©e les listes de valeurs de tempÃ©ratures et de lambda entourant la
+        # valeur recherchÃ©e.
         LT=[float(0)]*4
         LPr=[float(0)]*4
         for j in range(4):
@@ -504,16 +505,16 @@ def Pras(T):
 #    ______________
 #___/ Vapeur d'eau \___________________________________________________________
 
-# Capacité thermique.
+# CapacitÃ© thermique.
 def Cpvap(T):
-    """ Capacité thermique massique à pression constante de la vapeur d'eau 
-    considéréé comme un gaz parfait => Cp ne dépend que de la températures "T"
-    exprimée en K et comprise entre 0°C et 300°C. """
-    # Test de compatibilité de la valeur de la température
+    """ CapacitÃ© thermique massique Ã  pression constante de la vapeur d'eau 
+    considÃ©rÃ©Ã© comme un gaz parfait => Cp ne dÃ©pend que de la tempÃ©ratures "T"
+    exprimÃ©e en K et comprise entre 0Â°C et 300Â°C. """
+    # Test de compatibilitÃ© de la valeur de la tempÃ©rature
     if ((T<273.15) or (T>573.15)):
-        # Message d'erreur et arrêt.
-        print " Cpvap (Erreur) : La température envoyée doit être comprise entre\n\
-        273.15 K et 573.15 K."
+        # Message d'erreur et arrÃªt.
+        print(" Cpvap (Erreur) : La tempÃ©rature envoyÃ©e doit Ãªtre comprise entre\n\
+        273.15 K et 573.15 K.")
         return
     else:
         Cpb=[[
@@ -527,8 +528,8 @@ def Cpvap(T):
         6.2204]]
         # 
         i=int(math.floor(float(T-Cpb[0][0])/10))
-        # On crée les listes de valeurs de températures et de Cp entourant la
-        # valeur recherchée.
+        # On crÃ©e les listes de valeurs de tempÃ©ratures et de Cp entourant la
+        # valeur recherchÃ©e.
         LT=[float(0)]*4
         LCp=[float(0)]*4
         for j in range(4):
@@ -537,15 +538,15 @@ def Cpvap(T):
         # Puis on appelle la fonction d'interpolation sur ces 4 points
         return divers.interp_polyn_Lagrange(LT,LCp,T)*1e3
 
-# Viscosité dynamique.
+# ViscositÃ© dynamique.
 def muvap(T):
-    """ Viscosité dynamique de la vapeur d'eau pour une température "T" exprimée
-    en K et comprise entre 0°C et 300°C."""
-    # Test de compatibilité de la valeur de la température
+    """ ViscositÃ© dynamique de la vapeur d'eau pour une tempÃ©rature "T" exprimÃ©e
+    en K et comprise entre 0Â°C et 300Â°C."""
+    # Test de compatibilitÃ© de la valeur de la tempÃ©rature
     if ((T<273.15) or (T>573.15)):
-        # Message d'erreur et arrêt.
-        print " muvap (Erreur) : La température envoyée doit être comprise entre\n\
-        273.15 K et 573.15 K."
+        # Message d'erreur et arrÃªt.
+        print(" muvap (Erreur) : La tempÃ©rature envoyÃ©e doit Ãªtre comprise entre\n\
+        273.15 K et 573.15 K.")
         return
     else:
         mub=[[
@@ -561,8 +562,8 @@ def muvap(T):
         1.9652e-05]]
         # 
         i=int(math.floor(float(T-mub[0][0])/10))
-        # On crée les listes de valeurs de températures et de mu entourant la
-        # valeur recherchée.
+        # On crÃ©e les listes de valeurs de tempÃ©ratures et de mu entourant la
+        # valeur recherchÃ©e.
         LT=[float(0)]*4
         Lmu=[float(0)]*4
         for j in range(4):
@@ -571,32 +572,32 @@ def muvap(T):
         # Puis on appelle la fonction d'interpolation sur ces 4 points
         return divers.interp_polyn_Lagrange(LT,Lmu,T)
 
-# Viscosité cinématique.
+# ViscositÃ© cinÃ©matique.
 def nuvap(p,T):
-    """ Viscosité cinématique de la vapeur d'eau pour une pression "p" donnée
-    et une température "T" exprimée en K et comprise entre 0°C et 300°C. """
-    # Test de compatibilité de la valeur de la température
+    """ ViscositÃ© cinÃ©matique de la vapeur d'eau pour une pression "p" donnÃ©e
+    et une tempÃ©rature "T" exprimÃ©e en K et comprise entre 0Â°C et 300Â°C. """
+    # Test de compatibilitÃ© de la valeur de la tempÃ©rature
     if ((T<273.15) or (T>573.15)):
-        # Message d'erreur et arrêt.
-        print " nuvap (Erreur) : La température envoyée doit être comprise entre\n\
-        273.15 K et 573.15 K."
+        # Message d'erreur et arrÃªt.
+        print(" nuvap (Erreur) : La tempÃ©rature envoyÃ©e doit Ãªtre comprise entre\n\
+        273.15 K et 573.15 K.")
         return
     else:
-        # On commence par calculer la valeur de la viscosité dynamique
+        # On commence par calculer la valeur de la viscositÃ© dynamique
         mu=muvap(T)
-        # Puis on calcule la masse volumique par la loi d'état des gaz parfaits, ce
-        # qui nous donne la valeur de la viscosité cinématique.
+        # Puis on calcule la masse volumique par la loi d'Ã©tat des gaz parfaits, ce
+        # qui nous donne la valeur de la viscositÃ© cinÃ©matique.
         return mu/(p/(462.*T))
 
-# Conductivité thermique.
+# ConductivitÃ© thermique.
 def lambdavap(T):
-    """ Conductivité thermique de la vapeur d'eau pour une température "T"
-    exprimée en K et comprise entre 0°C et 300°C."""
-    # Test de compatibilité de la valeur de la température
+    """ ConductivitÃ© thermique de la vapeur d'eau pour une tempÃ©rature "T"
+    exprimÃ©e en K et comprise entre 0Â°C et 300Â°C."""
+    # Test de compatibilitÃ© de la valeur de la tempÃ©rature
     if ((T<223.15) or (T>573.15)):
-        # Message d'erreur et arrêt.
-        print " lambdavap (Erreur) : La température envoyée doit être comprise entre\n\
-        223.15 K et 573.15 K."
+        # Message d'erreur et arrÃªt.
+        print(" lambdavap (Erreur) : La tempÃ©rature envoyÃ©e doit Ãªtre comprise entre\n\
+        223.15 K et 573.15 K.")
         return
     else:
         lambdab=[[
@@ -611,8 +612,8 @@ def lambdavap(T):
         0.048730,0.051266,0.054035,0.057115,0.060618,0.064713,0.069655]]
         # 
         i=int(math.floor(float(T-lambdab[0][0])/10))
-        # On crée les listes de valeurs de températures et de lambda entourant la
-        # valeur recherchée.
+        # On crÃ©e les listes de valeurs de tempÃ©ratures et de lambda entourant la
+        # valeur recherchÃ©e.
         LT=[float(0)]*4
         Ll=[float(0)]*4
         for j in range(4):
@@ -624,13 +625,13 @@ def lambdavap(T):
 
 # Nombre de Prandl
 def Prvap(T):
-    """ Nombre de Prandtl de la vapeur d'eau pour une température "T" exprimée 
-    en K et comprise entre 0 et 300 °C """
-    # Test de compatibilité de la valeur de la température
+    """ Nombre de Prandtl de la vapeur d'eau pour une tempÃ©rature "T" exprimÃ©e 
+    en K et comprise entre 0 et 300 Â°C """
+    # Test de compatibilitÃ© de la valeur de la tempÃ©rature
     if ((T<273.15) or (T>573.15)):
-        # Message d'erreur et arrêt.
-        print " Prvap (Erreur) : La température envoyée doit être comprise entre\n\
-        273.15 K et 573.15 K."
+        # Message d'erreur et arrÃªt.
+        print(" Prvap (Erreur) : La tempÃ©rature envoyÃ©e doit Ãªtre comprise entre\n\
+        273.15 K et 573.15 K.")
         return
     else:
         Prb=[[
@@ -644,8 +645,8 @@ def Prvap(T):
         1.7550]]
         # 
         i=int(math.floor(float(T-Prb[0][0])/10))
-        # On crée les listes de valeurs de températures et de lambda entourant la
-        # valeur recherchée.
+        # On crÃ©e les listes de valeurs de tempÃ©ratures et de lambda entourant la
+        # valeur recherchÃ©e.
         LT=[float(0)]*4
         LPr=[float(0)]*4
         for j in range(4):
@@ -656,13 +657,13 @@ def Prvap(T):
 
 # Chaleur latente de vaporisation
 def ChLv(T):
-    """ Chaleur latente de Vaporisation en J/kg avec la température 
-    en K et comprise entre 0 et 300 °C """
-    # Test de compatibilité de la valeur de la température
+    """ Chaleur latente de Vaporisation en J/kg avec la tempÃ©rature 
+    en K et comprise entre 0 et 300 Â°C """
+    # Test de compatibilitÃ© de la valeur de la tempÃ©rature
     if ((T<273.16) or (T>573.15)):
-        # Message d'erreur et arrêt.
-        print " Lv (Erreur) : La température envoyée doit être comprise entre\n\
-        273.16 K et 573.16 K."
+        # Message d'erreur et arrÃªt.
+        print(" Lv (Erreur) : La tempÃ©rature envoyÃ©e doit Ãªtre comprise entre\n\
+        273.16 K et 573.16 K.")
         return
     else:
         Lvb=[[
@@ -676,8 +677,8 @@ def ChLv(T):
         1765.4,1715.1,1661.6,1604.4,1543,1476.6,1404.5]]
         # 
         i=int(math.floor(float(T-Lvb[0][0])/10))
-        # On crée les listes de valeurs de températures et de Lv entourant la
-        # valeur recherchée.
+        # On crÃ©e les listes de valeurs de tempÃ©ratures et de Lv entourant la
+        # valeur recherchÃ©e.
         LT=[float(0)]*4
         LLv=[float(0)]*4
         for j in range(4):
@@ -689,47 +690,47 @@ def ChLv(T):
 
 # Pression de saturation.
 def ps(T):
-    """ Calcul de la pression de saturation de vapeur à "T" donnée en K. """
+    """ Calcul de la pression de saturation de vapeur Ã  "T" donnÃ©e en K. """
     if (T >= 273.16):
         C=[22105649.25,-27405.526,97.5413,-0.146244,0.12558E-3,-0.48502E-7,4.34903,-0.39381E-2]
         if (T >= 534.):
-            print "ps (Avertissement) : La correlation utilisee pour calculer\n\
+            print("ps (Avertissement) : La correlation utilisee pour calculer\n\
             la pression de vapeur saturante n'est normalement valable que \n\
-            jusqu'a 260 C."
+            jusqu'a 260 C.")
         return float(C[0]*math.exp((C[1]+C[2]*T+C[3]*(T**2)+C[4]*(T**3)+C[5]*(T**4))/(C[6]*T+C[7]*(T**2))))
     else:
         if (T < 243.):
-            print "ps (Avertissement) : La correlation utilisee pour calculer\n\
+            print("ps (Avertissement) : La correlation utilisee pour calculer\n\
             la pression de vapeur saturante n'est normalement valable qu'a \n\
-            partir de -18 C.",T
+            partir de -18 C.",T)
         T2=K2C(T)
         return float(math.exp((1513.+25.6*T2)/(236.+T2)))
             # Pv=exp((1513+25.6*TC)/(236+TC))
             
 def Pvap(TC) :
-    """ Calcul de la pression de saturation de vapeur à "T" donnée en C. """
+    """ Calcul de la pression de saturation de vapeur Ã  "T" donnÃ©e en C. """
     return ps(C2K(TC))
 
 
 # Masse volumique
 def rhoas(p,T):
-    """Calcul de la masse volumique d'un air sec à pression "p" (en Pa) 
-    à température "T" (en K) le résultat est kg/m^³"""
+    """Calcul de la masse volumique d'un air sec Ã  pression "p" (en Pa) 
+    Ã  tempÃ©rature "T" (en K) le rÃ©sultat est kg/m^Â³"""
     return 1/T*p/287.05
 
 # Coefficient de diffusion de la vapeur d'eau dans l'air.
 def Dasvap(p,T):
     """Coefficient de diffusion de masse de la vapeur d'eau dans l'air pour "p"
-    exprimée en Pa et "T" en K. -20°C < T < 300°C. """
+    exprimÃ©e en Pa et "T" en K. -20Â°C < T < 300Â°C. """
     if (T < 253.15):
-        print "Dasvap (Erreur) : La température doit être comprise entre -20°C\n\
-        et 300°C."
+        print("Dasvap (Erreur) : La tempÃ©rature doit Ãªtre comprise entre -20Â°C\n\
+        et 300Â°C.")
         return
     elif (T >= 253.15) and (T < 353.15):
         return 104.91143e-6*(T**(1.774))/float(p)
     elif (T >= 353.15) and (T < 573.15):
         return 805.2375e-6/float(p)*(T**(5./2))/(190+T)
     else:
-        print "Dasvap (Erreur) : La température doit être comprise entre -20°C\n\
-        et 300°C."
+        print("Dasvap (Erreur) : La tempÃ©rature doit Ãªtre comprise entre -20Â°C\n\
+        et 300Â°C.")
         return 
