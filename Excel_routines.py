@@ -108,7 +108,7 @@ def read_Excel(filename,sheet,cellrange):
 
 if __name__ == '__main__':
     plt.close('all')
-    Fo=12
+    a=12.5
     nom='essai.xlsx'
     f='Feuille1'
     selec='B2:E5'
